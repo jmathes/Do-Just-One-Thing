@@ -122,4 +122,4 @@ class ToDoList(object):
         self._sort()
 
         for i, item in enumerate(self._items[:-1]):
-            assert self._items[i].urgency > self._items[i + 1]
+            assert self._items[i].urgency > self._items[i + 1].urgency
