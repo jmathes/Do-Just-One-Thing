@@ -1,11 +1,27 @@
 <html>
-  <link rel="stylesheet" type="text/css" href="style/layout.css" />
+  <link rel="stylesheet" href="style/CSS3.Gmail.Buttons/css3-gmail-style.css" type="text/css" />
+  <link rel="stylesheet" href="style/djot.css" type="text/css" />
   <body>
-    <h1>Do this:</h1>
-    <div class="thing-to-do">
-      <ul><li>{{ most_urgent_thing|escape }}</li></ul>
-    </div>
-    <div class="button">
+    <div class="content">
+      <div class="top-down">
+        <h1>Hello! Do this thing:</h1>
+      </div>
+      <div class="top-down">
+        <div class="left-to-right">
+          <div class="thing-to-do-box">
+            <div class="thing-to-do">
+              {{ most_urgent_thing|escape }}
+            </div>
+          </div>
+        </div>
+        <div class="left-to-right">
+          <a href="#" class="bttn icon tools unready"></a>
+        </div>
+      </div>
+      <div class="top-down">
+        <a href="#" class="bttn icon add unready">ADD A THING</a>
+        <a href="#" class="bttn icon approve blue unready">THING DONE!</a>
+      </div>
     </div>
   </body>
 </html>

@@ -1,0 +1,40 @@
+.content {
+    padding:20px;
+    margin:20px;
+    float:center;
+    width:800px;
+    -moz-border-radius: 15px;
+}
+
+.content h1 {
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+.thing-to-do-box {
+    padding:10px;
+    width:700px;
+    min-height:300;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border:1px solid black;
+}
+
+.thing-to-do {
+    margin:10px;
+    margin-left:20px;
+    display:list-item;
+}
+
+.left-to-right {
+    float:left;
+}
+
+.top-down {
+    clear:both;
+}
+
+.unready {
+}
