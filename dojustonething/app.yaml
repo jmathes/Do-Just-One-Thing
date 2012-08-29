@@ -7,8 +7,8 @@ handlers:
 - url: /style
   static_dir: style
 
-- url: /script
-  static_dir: script
+- url: /script/.*
+  script: script.py
 
 - url: /api/.*
   script: api.py

@@ -1,19 +1,33 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-from django.utils import simplejson
+from django.utils import simplejson as json
 
 
-class AddThing(webapp.RequestHandler):
-    def get(self):
+api_funcs = {}
+
+
+def api(func):
+    global api_funcs
+    api_funcs[func.__name__] = func
+
+
+@api
+def multiply(a, b):
+    return a * b
+
+
+class ApiRequestHandler(webapp.RequestHandler):
+    def post(self, func=None):
         self.response.headers['Content-Type'] = "application/json; charset=utf-8"
-        some_dict = {
-            "foo": 1,
-            "bar": 2,
-        }
-        self.response.out.write(simplejson.dumps(some_dict))
+        args = json.loads(self.request.get('args', '[]'))
+        if func in api_funcs:
+            response = json.dumps(api_funcs[func](*args))
+        # kwargs = self.request.get('kwargs')
+        # self.response.out.write(json.dumps(args[0] * args[1]))
+        self.response.out.write(response)
 
 application = webapp.WSGIApplication([
-     ('/api/add', AddThing),
+     ('/api/([^/]+)', ApiRequestHandler),
      ], debug=True)
 
 if __name__ == "__main__":
