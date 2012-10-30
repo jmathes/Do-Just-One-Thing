@@ -3,21 +3,30 @@
 # !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 import helpers
 from todolist import ToDoList, AmbiguousUrgencyExeption, all_chars
+import mock
 
 
 class FakeItem(object):
-    def __init__(self):
+    def __init__(self, parent=None):
         pass
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.__dict__)
+
+    def put(self):
+        pass
+
+    @classmethod
+    def gql(cls, query, key):
+        return []
 
 
 class ToDoListTestCase(helpers.DJOTTestCase):
     def setUp(self):
         self.username = helpers.make_random_string()
         self.list = ToDoList(item_type=FakeItem,
-                             username=self.username)
+                             username=self.username,
+                             db=mock.Mock())
         self.middle_char = all_chars[len(all_chars) / 2]
         print self.list
 
@@ -40,14 +49,14 @@ class ToDoListTestCase(helpers.DJOTTestCase):
     def test_newly_created_list_takes_username(self):
         self.assertEqual(self.username, self.list.username)
 
-    def test_inserting_item_preserves_content(self):
+    def test_inserting_item_preserves_task(self):
         self.assertTrue(self.list.empty)
 
         self.list.insert("Do\ntaxes")
 
         self.assertEqual(1, self.list.length)
         item = self.list[0]
-        self.assertEqual("Do\ntaxes", item.content)
+        self.assertEqual("Do\ntaxes", item.task)
 
     def test_inserting_item_adds_username(self):
         self.assertTrue(self.list.empty)
@@ -75,7 +84,7 @@ class ToDoListTestCase(helpers.DJOTTestCase):
             self.list.insert("Do something else")
             self.fail("Should have excepted")
         except AmbiguousUrgencyExeption as e:
-            self.assertEqual("Finish writing this app", e.benchmark.content)
+            self.assertEqual("Finish writing this app", e.benchmark.task)
 
     def test_insert_into_list_when_existing_item_is_less_urgent(self):
         self.list.insert("High priority thing")
@@ -87,8 +96,8 @@ class ToDoListTestCase(helpers.DJOTTestCase):
         high_priority_item = self.list[0]
         low_priority_item = self.list[1]
 
-        self.assertEqual("Higher priority thing", high_priority_item.content)
-        self.assertEqual("High priority thing", low_priority_item.content)
+        self.assertEqual("Higher priority thing", high_priority_item.task)
+        self.assertEqual("High priority thing", low_priority_item.task)
         self.assert_greater(high_priority_item.urgency, low_priority_item.urgency)
 
     def test_insert_into_list_when_existing_item_is_more_urgent(self):
@@ -103,9 +112,9 @@ class ToDoListTestCase(helpers.DJOTTestCase):
         high_priority_item = self.list[0]
         low_priority_item = self.list[1]
 
-        self.assertEqual("Low priority thing", low_priority_item.content)
+        self.assertEqual("Low priority thing", low_priority_item.task)
 
-        self.assertEqual("High priority thing", high_priority_item.content)
+        self.assertEqual("High priority thing", high_priority_item.task)
 
         self.assert_greater(high_priority_item.urgency, low_priority_item.urgency)
 
@@ -126,7 +135,7 @@ class ToDoListTestCase(helpers.DJOTTestCase):
             self.list.insert("middle2", upper_bound='C', lower_bound='A')
             self.fail("should have excepted")
         except AmbiguousUrgencyExeption as e:
-            self.assertEqual("middle", e.benchmark.content)
+            self.assertEqual("middle", e.benchmark.task)
 
     def test_insert_into_list_between_two_items_with_adjacent_urgencies_takes_first_one_and_adds_a_letter(self):
         self.list._test_force(("top", "A"), ("bottom", "B"))
@@ -148,9 +157,9 @@ class ToDoListTestCase(helpers.DJOTTestCase):
 
         self.assertEqual(3, self.list.length)
         self.assert_startswith(self.list[1].urgency, 'blahblah')
-        self.assertEqual('top', self.list[0].content)
-        self.assertEqual('middle', self.list[1].content)
-        self.assertEqual('bottom', self.list[2].content)
+        self.assertEqual('top', self.list[0].task)
+        self.assertEqual('middle', self.list[1].task)
+        self.assertEqual('bottom', self.list[2].task)
         self.assertTrue(self.list[0].urgency > self.list[1].urgency > self.list[2].urgency)
 
     def test_insert_into_list_thats_lower_than_lowest_possible_item_rejiggers_list(self):
@@ -159,8 +168,8 @@ class ToDoListTestCase(helpers.DJOTTestCase):
 
         self.list.insert("lower_than_low", upper_bound=all_chars[1])
         print self.list
-        self.assertEqual('lowest_possible', self.list[0].content)
-        self.assertEqual('lower_than_low', self.list[1].content)
+        self.assertEqual('lowest_possible', self.list[0].task)
+        self.assertEqual('lower_than_low', self.list[1].task)
         for i in xrange(self.list.length):
             self.assert_not_startswith(self.list[i].urgency, all_chars[0])
             self.assert_not_startswith(self.list[i].urgency, all_chars[-1])

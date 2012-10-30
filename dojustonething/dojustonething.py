@@ -5,8 +5,6 @@ from google.appengine.api import users
 # import cgi  # for cgi.escape(<user input>
 import os
 import urllib
-from todolistitem import ToDoListItem
-from todolist import ToDoList
 # import logging
 # logging.getLogger().setLevel(logging.DEBUG)
 # logging.debug("Hello")
@@ -40,10 +38,10 @@ class MainPage(webapp.RequestHandler):
         if user is None:
             return self.redirect(users.create_login_url(self.request.uri))
         username = user.nickname()
-
-        todolist = ToDoList(ToDoListItem, username)
+        logout_url = users.create_logout_url(self.request.uri)
 
         self.render('index.html', {
+            'logout_url': logout_url,
             'username': username,
             'most_urgent_thing': "Click on the + symbol to add a thing",
             })

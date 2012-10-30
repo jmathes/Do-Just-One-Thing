@@ -1,7 +1,12 @@
 $(document).ready(function() {
+    var thing_added = function(response) {
+        console.log(response);
+    };
+
     window.dialog = $("#dialog").dialog({
         buttons: { "Add": function() {
-            console.log($("#newthing").val());
+            var thingtodo = $("#newthing").val();
+            window.api("addtask", [thingtodo], thing_added);
             $(this).dialog("close");
         } },
         height: 400,

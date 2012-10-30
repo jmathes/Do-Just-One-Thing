@@ -21,3 +21,18 @@ indexes:
   properties:
   - name: date
     direction: desc
+
+- kind: ToDoListItem
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc
+
+- kind: ToDoListItem
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc
+  - name: task
+  - name: urgency
+  - name: username

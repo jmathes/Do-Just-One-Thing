@@ -1,6 +1,7 @@
 # encoding: utf-8
 # chr(33) through chr(126)
 # !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+import logging
 
 
 class AmbiguousUrgencyExeption(Exception):
@@ -13,17 +14,20 @@ middle_char = all_chars[len(all_chars) / 2]
 
 class ToDoList(object):
 
-    def __init__(self, item_type, username):
-        """
-        item_type must be a Class that expects to have:
-        username (string)
-        content (multiline string)
-        date (datetime.datetime)
-        urgency (string)
-        """
-        self.item_type = item_type
+    def __init__(self, username, db, item_type=None):
+        if item_type is None:
+            from todolistitem import ToDoListItem
+            item_type = ToDoListItem
+        self.db = db
         self.username = username
+        self.item_type = item_type
         self.reset()
+        items = self.item_type.gql("WHERE ANCESTOR IS :1 "
+                            "ORDER BY date DESC LIMIT 10000",
+                            self.key())
+        for item in items:
+            self._items.append(item)
+        self._sort()
 
     def __getitem__(self, index):
         items = self._items[1:-1]
@@ -33,7 +37,10 @@ class ToDoList(object):
         return "<%s's %s: %s>" % (
             self.username,
             self.__class__.__name__,
-            self._items)
+            self._items[1:-1])
+
+    def key(self):
+        return self.db.Key.from_path('ToDoList', self.username)
 
     def get_length(self):
         return len(self._items) - 2
@@ -52,9 +59,9 @@ class ToDoList(object):
 
     def _test_force(self, *args):
         self.reset()
-        for content, urgency in args:
+        for task, urgency in args:
             new_item = self.item_type()
-            new_item.content = content
+            new_item.task = task
             new_item.urgency = urgency
             new_item.username = self.username
             self._items.append(new_item)
@@ -63,9 +70,9 @@ class ToDoList(object):
     def _sort(self):
         self._items.sort(key=lambda item: item.urgency, reverse=True)
 
-    def make_new_item(self, content):
-        new_item = self.item_type()
-        new_item.content = content
+    def make_new_item(self, task):
+        new_item = self.item_type(parent=self.key())
+        new_item.task = task
         new_item.username = self.username
         return new_item
 
@@ -94,14 +101,14 @@ class ToDoList(object):
         middle_urgency = self.get_lexicographic_midpoint(high_urgency, low_urgency)
         return middle_urgency
 
-    def insert(self, content, upper_bound=None, lower_bound=None):
+    def insert(self, task, upper_bound=None, lower_bound=None):
         if upper_bound is None or upper_bound > self._items[0].urgency:
             upper_bound = self._items[0].urgency
         if lower_bound is None or lower_bound < self._items[-1].urgency:
             lower_bound = self._items[-1].urgency
         assert lower_bound < upper_bound
 
-        new_item = self.make_new_item(content)
+        new_item = self.make_new_item(task)
 
         for i, item in enumerate(self._items):
             if upper_bound > item.urgency:
@@ -118,6 +125,8 @@ class ToDoList(object):
             raise AmbiguousUrgencyExeption(self._items[halfway_point])
 
         new_item.urgency = self.get_urgency_between(upper_bound_index, lower_bound_index)
+        logging.debug("putting")
+        new_item.put()
         self._items.append(new_item)
         self._sort()
 
