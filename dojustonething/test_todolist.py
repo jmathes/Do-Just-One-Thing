@@ -42,6 +42,17 @@ class ToDoListTestCase(helpers.DJOTTestCase):
             self.assertEqual(chr(i + 33), all_chars[i])
             self.assertEqual(i + 33, ord(all_chars[i]))
 
+    def test_get_top_item(self):
+        self.list._test_force(("top", "A"), ("bottom", "C"))
+        self.assertEqual("top", self.list.get_top_item())
+
+    def test_get_top_item_longer_list(self):
+        self.list._test_force(("top2", "A"), ("middle", "B"), ("bottom", "C"))
+        self.assertEqual("top2", self.list.get_top_item())
+
+    def test_get_top_item_empty_list(self):
+        self.assertEqual(None, self.list.get_top_item())
+
     def test_newly_created_list_has_extremes_of_allchars_as_first_and_last_elements(self):
         self.assertEqual(self.list._items[0].urgency, all_chars[-1])
         self.assertEqual(self.list._items[-1].urgency, all_chars[0])

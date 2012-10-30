@@ -57,6 +57,11 @@ class ToDoList(object):
         fake_highest_item.urgency = all_chars[-1]
         self._items = [fake_highest_item, fake_lowest_item]
 
+    def get_top_item(self):
+        if len(self._items) == 2:
+            return None
+        return self._items[-2].task
+
     def _test_force(self, *args):
         self.reset()
         for task, urgency in args:
