@@ -2,6 +2,7 @@
 # chr(33) through chr(126)
 # !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 import logging
+import cgi
 
 
 class AmbiguousUrgencyExeption(Exception):
@@ -59,8 +60,8 @@ class ToDoList(object):
 
     def get_top_item(self):
         if len(self._items) == 2:
-            return None
-        return self._items[-2].task
+            return "Click on the + symbol to add a thing"
+        return cgi.escape(self._items[-2].task)
 
     def _test_force(self, *args):
         self.reset()
