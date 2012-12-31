@@ -1,6 +1,7 @@
 # encoding: utf-8
-# chr(33) through chr(126)
+# chr(33) through chr(125)
 # !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+# chr(32) is ' '; chr(126) is '~'
 import logging
 import cgi
 
@@ -108,6 +109,11 @@ class ToDoList(object):
         return middle_urgency
 
     def insert(self, task, upper_bound=None, lower_bound=None):
+        logging.debug(task)
+        if isinstance(task, dict):
+            upper_bound = task.get('upper_bound')
+            lower_bound = task.get('lower_bound')
+            task = task['task']
         if upper_bound is None or upper_bound > self._items[0].urgency:
             upper_bound = self._items[0].urgency
         if lower_bound is None or lower_bound < self._items[-1].urgency:
@@ -138,3 +144,4 @@ class ToDoList(object):
 
         for i, item in enumerate(self._items[:-1]):
             assert self._items[i].urgency > self._items[i + 1].urgency
+        logging.debug(str(self))

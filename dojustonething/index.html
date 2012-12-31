@@ -23,7 +23,13 @@
         <a href="#" class="bttn icon add unready" id="addthing">ADD ANOTHER THING</a>
         <a href="#" class="bttn icon approve blue unready">DID THIS THING!</a>
       </div>
-      <div id="dialog" title="Adding a thing" style="display:none;"><textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea></div>
+      <div id="newthing_dialog" title="Adding a thing" style="display:none;">  <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
+      <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
+        <div id="newthing_task" class="comparison">
+        </div>
+        <div id="benchmark_task" class="comparison">
+        </div>
+      </div>
     </div>
 
  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>

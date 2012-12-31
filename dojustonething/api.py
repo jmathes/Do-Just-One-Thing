@@ -20,16 +20,21 @@ def multiply(a, b):
 
 
 @api
-def addtask(task):
+def addtask(todo):
+    logging.debug(todo)
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     try:
-        users_list.insert(task)
+        users_list.insert(todo)
     except AmbiguousUrgencyExeption as e:
         logging.debug(e)
         return {
             'success': False,
-            'compare_to': [e.benchmark.task, e.benchmark.urgency],
+            'newthing': todo,
+            'benchmark': {
+                'task': e.benchmark.task,
+                'urgency': e.benchmark.urgency,
+            },
         }
     logging.debug(users_list)
     return {
