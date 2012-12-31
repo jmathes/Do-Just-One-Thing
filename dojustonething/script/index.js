@@ -18,9 +18,9 @@ $(document).ready(function() {
                 } else {
                     newthing.upper_bound = benchmark.urgency;
                 }
+                window.api("addtask", [newthing], thing_added);
+                $("#compare_dialog").dialog("close");
             });
-            window.api("addtask", [newthing], thing_added);
-            $("#compare_dialog").dialog("close");
 
         };
         draw_button("#newthing_task", newthing, benchmark, true);
