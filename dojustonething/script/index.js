@@ -32,12 +32,16 @@ $(document).ready(function() {
 
     var thing_added = function(response) {
         if (response.success) {
-            $("#thing-to-do").text(response.top_item);
+            show_next_task(response.top_item);
         } else {
             window.newthing = response.newthing;
             window.benchmark = response.benchmark;
             compare();
         }
+    };
+
+    var show_next_task = function(thing) {
+        $("#thing-to-do").text(thing);
     };
 
     window.newthing_dialog = $("#newthing_dialog").dialog({
@@ -68,6 +72,13 @@ $(document).ready(function() {
     $("#addthing").click(function() {
         $("#newthing").text("");
         $("#newthing_dialog").dialog("open");
+    });
+    $("#didthing").click(function() {
+        window.api(
+            "didtask",
+            [],
+            show_next_task
+        );
     });
 });
 

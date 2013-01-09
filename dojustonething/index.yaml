@@ -36,3 +36,8 @@ indexes:
   - name: task
   - name: urgency
   - name: username
+
+- kind: ToDoListItem
+  ancestor: yes
+  properties:
+  - name: date_completed

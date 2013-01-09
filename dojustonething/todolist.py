@@ -1,6 +1,7 @@
 # encoding: utf-8
 # import logging
 import cgi
+from datetime import datetime
 
 from todolistitem import ToDoListItem
 
@@ -19,8 +20,9 @@ class ToDoList(object):
         self.db = db
         self.username = username
         self.reset()
-        items = ToDoListItem.gql("WHERE ANCESTOR IS :1 "
-                            "ORDER BY date DESC LIMIT 10000",
+        items = ToDoListItem.gql("WHERE date_completed = NULL"
+                            " AND ANCESTOR IS :1"
+                            " LIMIT 10000",
                             self.key())
         for item in items:
             self._items.append(item)
@@ -58,6 +60,15 @@ class ToDoList(object):
         if len(self._items) == 2:
             return "Click on the + symbol to add a thing"
         return cgi.escape(self._items[1].task)
+
+    def remove_item(self, index):
+        if len(self._items) <= 2:
+            return "No you didn't. Click on the + symbol to add a thing."
+        done = self._items[index]
+        done.date_completed = datetime.now()
+        done.save()
+        self._items = self._items[:index] + self._items[index + 1:]
+        return self.get_top_item()
 
     def _test_force(self, *args):
         self.reset()
