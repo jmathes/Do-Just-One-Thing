@@ -1,8 +1,5 @@
 # encoding: utf-8
-# chr(33) through chr(125)
-# !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-# chr(32) is ' '; chr(126) is '~'
-import logging
+# import logging
 import cgi
 
 from todolistitem import ToDoListItem

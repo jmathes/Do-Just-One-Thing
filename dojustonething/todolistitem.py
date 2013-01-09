@@ -1,7 +1,4 @@
 # encoding: utf-8
-
-# chr(24) through chr(128)
-# !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 from google.appengine.ext import db
 
 
