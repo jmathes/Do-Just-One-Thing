@@ -21,13 +21,11 @@ def multiply(a, b):
 
 @api
 def addtask(todo):
-    logging.debug(todo)
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     try:
         users_list.insert(todo)
     except AmbiguousUrgencyExeption as e:
-        logging.debug(e)
         return {
             'success': False,
             'newthing': todo,
@@ -36,7 +34,6 @@ def addtask(todo):
                 'urgency': e.benchmark.urgency,
             },
         }
-    logging.debug(users_list)
     return {
         'success': True,
         'top_item': users_list.get_top_item(),
@@ -58,5 +55,5 @@ application = webapp.WSGIApplication([
      ], debug=True)
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(logging.WARNING)
     run_wsgi_app(application)

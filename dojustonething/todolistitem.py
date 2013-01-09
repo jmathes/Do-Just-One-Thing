@@ -10,7 +10,7 @@ class ToDoListItem(db.Model):
     username = db.StringProperty()
     task = db.StringProperty(multiline=True)
     date = db.DateTimeProperty(auto_now_add=True)
-    urgency = db.StringProperty()
+    urgency = db.FloatProperty()
 
     def __repr__(self):
         return "%s-%s-%s: %s" % (
