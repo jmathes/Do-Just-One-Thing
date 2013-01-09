@@ -25,13 +25,14 @@ def didtask():
     users_list = ToDoList(user.nickname(), db)
     return users_list.remove_item(1)
 
+
 @api
 def addtask(todo):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     try:
         users_list.insert(todo)
-    except AmbiguousUrgencyExeption as e:
+    except AmbiguousUrgencyExeption, e:
         return {
             'success': False,
             'newthing': todo,
