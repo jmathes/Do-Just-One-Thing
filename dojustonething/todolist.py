@@ -66,18 +66,18 @@ class ToDoList(object):
             'id': self._items[1].key().id(),
         }
 
-    def get_thing_index(self, thing_id):
+    def get_thing_index(self, item_id):
         for index, item in enumerate(self._items):
             if item in [self._items[0], self._items[-1]]:
                 continue
-            if thing_id == item.key().id():
+            if item_id == item.key().id():
                 break
         if index == len(self._items) - 1:
             return None
         return index
 
-    def remove_item(self, thing_id):
-        index = self.get_thing_index(thing_id)
+    def remove_item(self, item_id):
+        index = self.get_thing_index(item_id)
         if index is None:
             return
         done = self._items[index]

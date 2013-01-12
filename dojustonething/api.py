@@ -20,10 +20,10 @@ def multiply(a, b):
 
 
 @api
-def did_task(thing_id):
+def did_task(item_id):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
-    users_list.remove_item(thing_id)
+    users_list.remove_item(item_id)
     return users_list.get_top_item()
 
 
