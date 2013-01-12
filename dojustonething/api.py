@@ -1,9 +1,11 @@
+import logging
+
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
 from django.utils import simplejson as json
+
 from todolist import ToDoList, AmbiguousUrgencyExeption
-import logging
 
 
 api_funcs = {}
@@ -24,6 +26,14 @@ def did_task(item_id):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     users_list.remove_item(item_id)
+    return users_list.get_top_item()
+
+
+@api
+def delay_task(item_id):
+    user = users.get_current_user()
+    users_list = ToDoList(user.nickname(), db)
+    users_list.delay_item(item_id)
     return users_list.get_top_item()
 
 

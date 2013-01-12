@@ -1,8 +1,10 @@
+import logging
+import os
+
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
-import os
 
 
 def todolist_key(username=None):
@@ -46,4 +48,5 @@ application = webapp.WSGIApplication([
      ], debug=True)
 
 if __name__ == "__main__":
+    logging.getLogger().setLevel(logging.DEBUG)
     run_wsgi_app(application)

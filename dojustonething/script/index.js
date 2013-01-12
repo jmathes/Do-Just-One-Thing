@@ -75,6 +75,13 @@ $(document).ready(function() {
         $("#newthing").attr("value", "");
         $("#newthing_dialog").dialog("open");
     });
+    $("#delaything").click(function() {
+        window.api(
+            "delay_task",
+            [window.task_id],
+            show_next_task
+        );
+    });
     $("#didthing").click(function() {
         window.api(
             "did_task",

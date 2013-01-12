@@ -1,6 +1,7 @@
 # encoding: utf-8
 import cgi
-from datetime import datetime
+import logging
+from datetime import datetime, timedelta
 
 from todolistitem import ToDoListItem
 
@@ -56,14 +57,17 @@ class ToDoList(object):
         self._items = [fake_highest_item, fake_lowest_item]
 
     def get_top_item(self):
-        if len(self._items) == 2:
-            return {
-                'task': "Click on the + symbol to add a thing",
-                'id': None,
-            }
+        now = datetime.now()
+        for item in self._items[1:-1]:
+            if item.delay_until is None or item.delay_until <= now:
+                return {
+                    'task': cgi.escape(self._items[1].task),
+                    'id': self._items[1].key().id(),
+                }
+
         return {
-            'task': cgi.escape(self._items[1].task),
-            'id': self._items[1].key().id(),
+            'task': "Click on the + symbol to add a thing",
+            'id': None,
         }
 
     def get_thing_index(self, item_id):
@@ -75,6 +79,14 @@ class ToDoList(object):
         if index == len(self._items) - 1:
             return None
         return index
+
+    def delay_item(self, item_id):
+        index = self.get_thing_index(item_id)
+        if index is None:
+            return
+        done = self._items[index]
+        done.delay_until = datetime.now() + timedelta(hours=4)
+        done.save()
 
     def remove_item(self, item_id):
         index = self.get_thing_index(item_id)
