@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    window.task_id = -1;
     $("#newthing_task").click(function() {
         window.newthing.lower_bound = window.benchmark.urgency;
         window.api("add_task", [window.newthing], thing_added);
@@ -41,6 +42,7 @@ $(document).ready(function() {
     };
 
     var show_next_task = function(thing) {
+        window.task_id = thing['id'];
         $("#thing-to-do").text(thing['task']);
     };
 
@@ -76,7 +78,7 @@ $(document).ready(function() {
     $("#didthing").click(function() {
         window.api(
             "did_task",
-            [],
+            [window.task_id],
             show_next_task
         );
     });
