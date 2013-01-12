@@ -72,7 +72,7 @@ $(document).ready(function() {
     });
 
     $("#addthing").click(function() {
-        $("#newthing").text("");
+        $("#newthing").attr("value", "");
         $("#newthing_dialog").dialog("open");
     });
     $("#didthing").click(function() {
