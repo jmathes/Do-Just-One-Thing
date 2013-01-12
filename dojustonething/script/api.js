@@ -5,7 +5,8 @@ if (!window.api) {
             data: {args: JSON.stringify(args)},
             success: success,
             error: function(result) {
-                alert("addthing error");
+                console.log(result);
+                alert("Something went wrong. Sorry");
             }
         });
     };
