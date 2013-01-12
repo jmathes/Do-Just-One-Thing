@@ -69,12 +69,11 @@ class ToDoList(object):
 
     def remove_item(self, index):
         if len(self._items) <= 2:
-            return "No you didn't. Click on the + symbol to add a thing."
+            return
         done = self._items[index]
         done.date_completed = datetime.now()
         done.save()
         self._items = self._items[:index] + self._items[index + 1:]
-        return self.get_top_item()
 
     def _test_force(self, *args):
         self.reset()

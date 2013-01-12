@@ -23,7 +23,8 @@ def multiply(a, b):
 def did_task():
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
-    return users_list.remove_item(1)
+    users_list.remove_item(1)
+    return users_list.get_top_item()
 
 
 @api
