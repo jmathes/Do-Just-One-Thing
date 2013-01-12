@@ -5,7 +5,7 @@
     <div class="content">
       <a href="{{ logout_url|escape }}" style="float:right;">logout</a>
       <div class="top-down">
-        <h1>Hello! Do this thing:</h1>
+        <h1>Hello! Do this:</h1>
       </div>
       <div class="top-down">
         <div class="left-to-right">
@@ -19,9 +19,10 @@
           <a href="#" class="bttn icon tools unready"></a>
         </div>
       </div>
-      <div class="top-down">
-        <a href="#" class="bttn icon add unready" id="addthing">ADD ANOTHER THING</a>
-        <a href="#" class="bttn icon approve blue unready" id="didthing">DID THIS THING!</a>
+      <div class="top-down" style="padding:5px;">
+        <a href="#" class="bttn icon add unready" id="addthing">ADD</a>
+        <a href="#" class="bttn icon pin yellow unready" id="delaything">NOT  NOW</a>
+        <a href="#" class="bttn icon approve blue unready" id="didthing">DONE!</a>
       </div>
       <div id="newthing_dialog" title="Adding a thing" style="display:none;">  <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
       <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
