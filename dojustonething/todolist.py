@@ -61,8 +61,8 @@ class ToDoList(object):
         for item in self._items[1:-1]:
             if item.delay_until is None or item.delay_until <= now:
                 return {
-                    'task': cgi.escape(self._items[1].task),
-                    'id': self._items[1].key().id(),
+                    'task': cgi.escape(item.task),
+                    'id': item.key().id(),
                 }
 
         return {
