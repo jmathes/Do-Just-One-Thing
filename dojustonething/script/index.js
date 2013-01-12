@@ -1,13 +1,13 @@
 $(document).ready(function() {
     $("#newthing_task").click(function() {
         window.newthing.lower_bound = window.benchmark.urgency;
-        window.api("addtask", [window.newthing], thing_added);
+        window.api("add_task", [window.newthing], thing_added);
         $("#compare_dialog").dialog("close");
     });
 
     $("#benchmark_task").click(function() {
         window.newthing.upper_bound = window.benchmark.urgency;
-        window.api("addtask", [window.newthing], thing_added);
+        window.api("add_task", [window.newthing], thing_added);
         $("#compare_dialog").dialog("close");
     });
 
@@ -41,14 +41,14 @@ $(document).ready(function() {
     };
 
     var show_next_task = function(thing) {
-        $("#thing-to-do").text(thing);
+        $("#thing-to-do").text(thing['task']);
     };
 
     window.newthing_dialog = $("#newthing_dialog").dialog({
         buttons: { "Add": function() {
             var thingtodo = $("#newthing").val();
             window.api(
-                "addtask",
+                "add_task",
                 [{
                     task: thingtodo,
                     upper_bound: null,
@@ -75,10 +75,16 @@ $(document).ready(function() {
     });
     $("#didthing").click(function() {
         window.api(
-            "didtask",
+            "did_task",
             [],
             show_next_task
         );
     });
+
+    window.api(
+        "get_next_task",
+        [],
+        show_next_task
+        );
 });
 

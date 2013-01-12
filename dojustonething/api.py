@@ -20,14 +20,21 @@ def multiply(a, b):
 
 
 @api
-def didtask():
+def did_task():
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     return users_list.remove_item(1)
 
 
 @api
-def addtask(todo):
+def get_next_task():
+    user = users.get_current_user()
+    users_list = ToDoList(user.nickname(), db)
+    return users_list.get_top_item()
+
+
+@api
+def add_task(todo):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     try:

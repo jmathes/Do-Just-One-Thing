@@ -3,7 +3,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
 import os
-from todolist import ToDoList
 
 
 def todolist_key(username=None):
@@ -35,12 +34,10 @@ class MainPage(webapp.RequestHandler):
             return self.redirect(users.create_login_url(self.request.uri))
         username = user.nickname()
         logout_url = users.create_logout_url(self.request.uri)
-        users_list = ToDoList(user.nickname(), db)
 
         self.render('index.html', {
             'logout_url': logout_url,
             'username': username,
-            'most_urgent_thing': users_list.get_top_item(),
             })
 
 

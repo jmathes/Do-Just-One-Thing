@@ -58,8 +58,14 @@ class ToDoList(object):
 
     def get_top_item(self):
         if len(self._items) == 2:
-            return "Click on the + symbol to add a thing"
-        return cgi.escape(self._items[1].task)
+            return {
+                'task': "Click on the + symbol to add a thing",
+                'id': None,
+            }
+        return {
+            'task': cgi.escape(self._items[1].task),
+            'id': self._items[1].key().id(),
+        }
 
     def remove_item(self, index):
         if len(self._items) <= 2:
