@@ -19,11 +19,13 @@ h1 {
 .thing-to-do-box {
     padding:10px;
     width:700px;
+    font-size:20px;
     min-height:300;
     -moz-border-radius:15px;
     -webkit-border-radius:15px;
     border-radius:15px;
-    border:1px solid black;
+    border-right:1px solid black;
+    border-bottom:1px solid black;
 }
 
 .thing-to-do {
