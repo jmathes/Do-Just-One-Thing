@@ -8,33 +8,28 @@
   </head>
   <body>
     <div class="content">
-      <div class"left-to-right">
-        <a href="{{ logout_url|escape }}" style="float:right;">logout</a>
-      </div>
-      <div class"left-to-right">
-        <div class="top-down">
-          <div class="left-to-right">
-            <div class="thing-to-do-box">
-              <h2 id="thing-to-do" class="thing-to-do">
-                <img src="img/roller.gif"> </img>
-              </div>
+      <div class="top-down">
+        <div class="left-to-right">
+          <div class="thing-to-do-box">
+            <h2 id="thing-to-do" class="thing-to-do">
+              <img src="img/roller.gif"> </img>
             </div>
           </div>
-          <div class="left-to-right">
-            <a href="#" class="bttn icon tools unready"></a>
-          </div>
         </div>
-        <div class="top-down" style="padding:5px;">
-          <a href="#" class="bttn icon add unready" id="addthing">ADD</a>
-          <a href="#" class="bttn icon pin yellow unready" id="delaything">NOT NOW</a>
-          <a href="#" class="bttn icon approve blue unready" id="didthing">DONE!</a>
+        <div class="left-to-right">
+          <a href="#" class="bttn icon tools unready"></a>
         </div>
-        <div id="newthing_dialog" title="Adding a thing" style="display:none;">  <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
-        <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
-          <div id="newthing_task" class="comparison">
-          </div>
-          <div id="benchmark_task" class="comparison">
-          </div>
+      </div>
+      <div class="top-down" style="padding:5px;">
+        <a href="#" class="bttn icon add unready" id="addthing">ADD</a>
+        <a href="#" class="bttn icon pin yellow unready" id="delaything">NOT NOW</a>
+        <a href="#" class="bttn icon approve blue unready" id="didthing">DONE!</a>
+      </div>
+      <div id="newthing_dialog" title="Adding a thing" style="display:none;">  <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
+      <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
+        <div id="newthing_task" class="comparison">
+        </div>
+        <div id="benchmark_task" class="comparison">
         </div>
       </div>
     </div>
