@@ -20,10 +20,11 @@ class ToDoList(object):
         self.db = db
         self.username = username
         self.reset()
-        items = ToDoListItem.gql("WHERE date_completed = NULL"
-                            " AND ANCESTOR IS :1"
-                            " LIMIT 10000",
-                            self.key())
+        items = ToDoListItem.gql(
+            "WHERE date_completed = NULL"
+            " AND ANCESTOR IS :1"
+            " LIMIT 10000",
+            self.key())
         for item in items:
             self._items.append(item)
         self._sort()
@@ -133,6 +134,13 @@ class ToDoList(object):
         if lower_bound is None:
             lower_bound = self._items[-1].urgency
         assert lower_bound >= self._items[-1].urgency
+        if lower_bound >= upper_bound:
+            logging.info("Task %s has priorities backwards: (%s, %s) [%s, %s]",
+                         task['thingtodo'],
+                         lower_bound,
+                         upper_bound,
+                         task['lower_bound'],
+                         task['upper_bound'])
         assert lower_bound < upper_bound
 
         new_item = self.make_new_item(task)

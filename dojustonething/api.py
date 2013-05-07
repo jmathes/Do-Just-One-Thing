@@ -62,7 +62,7 @@ def add_task(todo):
     return {
         'success': True,
         'top_item': users_list.get_top_item(),
-        }
+    }
 
 
 class ApiRequestHandler(webapp.RequestHandler):
@@ -75,9 +75,8 @@ class ApiRequestHandler(webapp.RequestHandler):
         # self.response.out.write(json.dumps(args[0] * args[1]))
         self.response.out.write(response)
 
-application = webapp.WSGIApplication([
-     ('/api/([^/]+)', ApiRequestHandler),
-     ], debug=True)
+application = webapp.WSGIApplication(
+    [('/api/([^/]+)', ApiRequestHandler), ], debug=True)
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.WARNING)
