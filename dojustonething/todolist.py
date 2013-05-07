@@ -120,6 +120,10 @@ class ToDoList(object):
     def get_urgency_between(self, high_index, low_index):
         high_urgency = self._items[high_index].urgency
         low_urgency = self._items[low_index].urgency
+        if abs(high_urgency - low_urgency) / abs(low_urgency) < .00001:
+            self._recalculate_urgencies()
+            return self.get_urgency_between(high_index, low_index)
+
         middle_urgency = (high_urgency + low_urgency) / 2.
         return middle_urgency
 
@@ -164,9 +168,25 @@ class ToDoList(object):
             raise AmbiguousUrgencyExeption(self._items[halfway_point])
 
         new_item.urgency = self.get_urgency_between(upper_bound_index, lower_bound_index)
+
         new_item.put()
         self._items.append(new_item)
         self._sort()
 
         for i, item in enumerate(self._items[:-1]):
             assert self._items[i].urgency > self._items[i + 1].urgency
+
+    def _recalculate_urgencies(self):
+        assert len(self._items) >= 4
+        logging.error("recalculating...")
+        logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
+
+        step = (2 ** 17) / (len(self._items) - 1)
+        max_urgency = (2 ** 16) - step
+        logging.error("step: %s", step)
+        logging.error("max_urgency: %s", max_urgency)
+        for i, item in enumerate(self._items[1:-1]):
+            new_urgency = 1. * max_urgency - step * i
+            logging.error("changing urgency for %s from %s to %s", item, item.urgency, new_urgency)
+            item.urgency = new_urgency
+            item.save()
