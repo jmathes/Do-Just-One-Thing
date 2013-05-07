@@ -3,7 +3,13 @@ import logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
-import json
+try:
+    import json
+except ImportError:
+    try:
+        from django.utils import simplejson as json
+    except ImportError:
+        import simplejson as json
 
 from todolist import ToDoList, AmbiguousUrgencyExeption
 
@@ -51,6 +57,7 @@ def add_task(todo):
     try:
         users_list.insert(todo)
     except AmbiguousUrgencyExeption, e:
+        logging.info
         return {
             'success': False,
             'newthing': todo,
