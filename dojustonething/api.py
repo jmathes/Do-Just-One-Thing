@@ -3,7 +3,7 @@ import logging
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
-from django.utils import simplejson as json
+import json
 
 from todolist import ToDoList, AmbiguousUrgencyExeption
 

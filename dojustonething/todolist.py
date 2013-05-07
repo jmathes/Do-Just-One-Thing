@@ -124,6 +124,7 @@ class ToDoList(object):
         return middle_urgency
 
     def insert(self, task, upper_bound=None, lower_bound=None):
+        logging.error("Adding task %s", task)
         if isinstance(task, dict):
             upper_bound = task.get('upper_bound')
             lower_bound = task.get('lower_bound')
@@ -135,25 +136,31 @@ class ToDoList(object):
             lower_bound = self._items[-1].urgency
         assert lower_bound >= self._items[-1].urgency
         if lower_bound >= upper_bound:
-            logging.info("Task %s has priorities backwards: (%s, %s) [%s, %s]",
-                         task['thingtodo'],
-                         lower_bound,
-                         upper_bound,
-                         task['lower_bound'],
-                         task['upper_bound'])
+            logging.error(
+                "Task %s has priorities backwards: (%s, %s) [%s, %s]",
+                task['thingtodo'],
+                lower_bound,
+                upper_bound,
+                task['lower_bound'],
+                task['upper_bound'])
         assert lower_bound < upper_bound
 
         new_item = self.make_new_item(task)
 
         for i, item in enumerate(self._items):
             if item.urgency >= upper_bound:
+                logging.error("upper bound task: %s" % item)
                 upper_bound_index = i
             if item.urgency <= lower_bound:
+                logging.error("lower bound task: %s" % item)
                 lower_bound_index = i
                 break
+        logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
 
         if lower_bound_index - upper_bound_index > 1:
             halfway_point = (upper_bound_index + lower_bound_index) / 2
+            logging.error("halfway point: %s" % halfway_point)
+            logging.error("halfway item: %s" % self._items[halfway_point])
             raise AmbiguousUrgencyExeption(self._items[halfway_point])
 
         new_item.urgency = self.get_urgency_between(upper_bound_index, lower_bound_index)
