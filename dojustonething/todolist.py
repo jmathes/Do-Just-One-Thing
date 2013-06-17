@@ -4,7 +4,6 @@ import logging
 from datetime import datetime, timedelta
 
 from todolistitem import ToDoListItem
-from user import User
 
 
 class AmbiguousUrgencyExeption(Exception):
@@ -179,7 +178,7 @@ class ToDoList(object):
             assert self._items[i].urgency > self._items[i + 1].urgency
 
     def _recalculate_urgencies(self):
-        assert len(self._items) >= 4
+        assert len(self._items) >= 3
         logging.error("recalculating...")
         logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
 

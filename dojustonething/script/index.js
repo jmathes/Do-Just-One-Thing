@@ -46,6 +46,15 @@ $(document).ready(function() {
         $("#thing-to-do").text(thing['task']);
     };
 
+    var show_score = function(score) {
+        $("#score").text(score);
+    };
+
+    var show_next_task_and_score = function(response) {
+        show_next_task(response[0]);
+        show_score(response[1]);
+    };
+
     window.newthing_dialog = $("#newthing_dialog").dialog({
         buttons: { "Add": function() {
             var thingtodo = $("#newthing").val();
@@ -86,14 +95,14 @@ $(document).ready(function() {
         window.api(
             "did_task",
             [window.task_id],
-            show_next_task
+            show_next_task_and_score
         );
     });
 
     window.api(
-        "get_next_task",
+        "get_next_task_and_score",
         [],
-        show_next_task
+        show_next_task_and_score
         );
 });
 

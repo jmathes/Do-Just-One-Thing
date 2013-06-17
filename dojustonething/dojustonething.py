@@ -25,7 +25,7 @@ class MainPage(webapp.RequestHandler):
         self.render('index.html', {
             'logout_url': logout_url,
             'username': username,
-≈        })
+        })
 
 
 application = webapp.WSGIApplication(
