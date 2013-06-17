@@ -15,8 +15,8 @@ handlers:
 - url: /img
   static_dir: img
 
-- url: /script/.*
-  script: script.py
+- url: /script
+  static_dir: script
 
 - url: /api/.*
   script: api.py

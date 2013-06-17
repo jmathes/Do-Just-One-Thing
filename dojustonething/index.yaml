@@ -22,6 +22,11 @@ indexes:
   - name: date
     direction: desc
 
+- kind: Score
+  properties:
+  - name: username_key
+  - name: score
+
 - kind: ToDoListItem
   ancestor: yes
   properties:

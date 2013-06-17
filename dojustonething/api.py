@@ -57,7 +57,6 @@ def add_task(todo):
     try:
         users_list.insert(todo)
     except AmbiguousUrgencyExeption, e:
-        logging.info
         return {
             'success': False,
             'newthing': todo,

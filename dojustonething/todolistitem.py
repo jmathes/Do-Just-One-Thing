@@ -3,7 +3,7 @@ from google.appengine.ext import db
 
 
 class ToDoListItem(db.Model):
-    """Models an individual Guestbook entry with an author, task, and date."""
+    """Models an individual ToDoList item"""
     username = db.StringProperty()
     task = db.StringProperty(multiline=True)
     date = db.DateTimeProperty(auto_now_add=True)

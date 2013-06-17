@@ -4,6 +4,7 @@ import logging
 from datetime import datetime, timedelta
 
 from todolistitem import ToDoListItem
+from user import User
 
 
 class AmbiguousUrgencyExeption(Exception):
@@ -120,9 +121,6 @@ class ToDoList(object):
     def get_urgency_between(self, high_index, low_index):
         high_urgency = self._items[high_index].urgency
         low_urgency = self._items[low_index].urgency
-        if abs(high_urgency - low_urgency) / abs(low_urgency) < .00001:
-            self._recalculate_urgencies()
-            return self.get_urgency_between(high_index, low_index)
 
         middle_urgency = (high_urgency + low_urgency) / 2.
         return middle_urgency
@@ -142,7 +140,7 @@ class ToDoList(object):
         if lower_bound >= upper_bound:
             logging.error(
                 "Task %s has priorities backwards: (%s, %s) [%s, %s]",
-                task['thingtodo'],
+                task['task'],
                 lower_bound,
                 upper_bound,
                 task['lower_bound'],
@@ -159,6 +157,9 @@ class ToDoList(object):
                 logging.error("lower bound task: %s" % item)
                 lower_bound_index = i
                 break
+            else:
+                logging.error("not lower bound task: %s", item)
+                logging.error("(item.urgency <= lower_bound is %s <= %s is %s", item.urgency, lower_bound, item.urgency <= lower_bound)
         logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
 
         if lower_bound_index - upper_bound_index > 1:
@@ -172,6 +173,7 @@ class ToDoList(object):
         new_item.put()
         self._items.append(new_item)
         self._sort()
+        self._recalculate_urgencies()
 
         for i, item in enumerate(self._items[:-1]):
             assert self._items[i].urgency > self._items[i + 1].urgency
