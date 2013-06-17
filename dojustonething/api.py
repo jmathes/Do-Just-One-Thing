@@ -35,8 +35,9 @@ def did_task(item_id):
     users_list.remove_item(item_id)
     user_info = UserInfo.get(user)
     new_points = random.randint(0, 1)
-    while random.randint(1, 5) > 3 and new_points < 60:
+    while random.randint(1, 5) > 3 and new_points < 20:
         new_points *= 2
+        new_points += random.randint(0, 3)
     user_info.score += new_points
     user_info.save()
     return [users_list.get_top_item(), user_info.score]
