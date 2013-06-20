@@ -32,7 +32,7 @@ def did_task(item_id):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     users_list.remove_item(item_id)
-    user_info = UserIanfo.get(user)
+    user_info = UserInfo.get(user)
     new_points = random.randint(0, 1)
     while random.randint(1, 5) > 3 and new_points < 20:
         new_points *= 2
