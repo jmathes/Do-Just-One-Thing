@@ -99,6 +99,14 @@ $(document).ready(function() {
         );
     });
 
+    $("#deletething").click(function() {
+        window.api(
+            "delete_task",
+            [window.task_id],
+            show_next_task_and_score
+        );
+    });
+
     window.api(
         "get_next_task_and_score",
         [],
