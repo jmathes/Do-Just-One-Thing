@@ -45,7 +45,7 @@ def did_task(item_id):
 def delete_task(item_id):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
-    users_list.remove_item(item_id)
+    users_list.delete_item(item_id)
     user_info = UserInfo.get(user)
     return [users_list.get_top_item(), user_info.score]
 

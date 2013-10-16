@@ -2,6 +2,7 @@
 import cgi
 import logging
 from datetime import datetime, timedelta
+from pprint import pprint, pformat
 
 from todolistitem import ToDoListItem
 
@@ -13,6 +14,8 @@ class AmbiguousUrgencyExeption(Exception):
 HIGHEST_URGENCY = float(2 ** 16)
 LOWEST_URGENCY = -1 * HIGHEST_URGENCY
 
+TIMEZONE_OFFSET = 8 # PST + 1
+THROTTLE = 3 # number of items you can do in a day
 
 class ToDoList(object):
 
@@ -27,6 +30,27 @@ class ToDoList(object):
             self.key())
         for item in items:
             self._items.append(item)
+        now = datetime.now()
+        beginning_of_today = datetime(
+            year=now.year,
+            month=now.month,
+            day=now.day
+            )
+        if now.hour > TIMEZONE_OFFSET:
+            beginning_of_today += timedelta(hours=TIMEZONE_OFFSET)
+        else:
+            beginning_of_today -= timedelta(hours=24 - TIMEZONE_OFFSET)
+        logging.error(now)
+        logging.error(beginning_of_today)
+        completed_items = ToDoListItem.gql(
+            "WHERE date_completed > :1"
+            " AND ANCESTOR IS :2"
+            " LIMIT 5",
+            beginning_of_today,
+            self.key())
+        self._items_completed_today = 0
+        for item in completed_items:
+            self._items_completed_today += 1
         self._sort()
 
     def __getitem__(self, index):
@@ -56,9 +80,16 @@ class ToDoList(object):
         fake_lowest_item = self.make_new_item("(hidden lowest priority item)")
         fake_lowest_item.urgency = LOWEST_URGENCY
         self._items = [fake_highest_item, fake_lowest_item]
+        self._items_completed_today = 0
 
     def get_top_item(self):
         now = datetime.now()
+        if self._items_completed_today >= THROTTLE:
+            return {
+                'task': "Enjoy the rest of the day! You've already finished your %s things for today" % THROTTLE,
+                'id': None,
+            }
+
         for item in self._items[1:-1]:
             if item.delay_until is None or item.delay_until <= now:
                 return {
@@ -95,7 +126,16 @@ class ToDoList(object):
             return
         done = self._items[index]
         done.date_completed = datetime.now()
+        self._items_completed_today += 1
         done.save()
+        self._items = self._items[:index] + self._items[index + 1:]
+
+    def delete_item(self, item_id):
+        index = self.get_thing_index(item_id)
+        if index is None:
+            return
+        done = self._items[index]
+        done.delete()
         self._items = self._items[:index] + self._items[index + 1:]
 
     def _test_force(self, *args):
@@ -125,7 +165,7 @@ class ToDoList(object):
         return middle_urgency
 
     def insert(self, task, upper_bound=None, lower_bound=None):
-        logging.error("Adding task %s", task)
+        # logging.error("Adding task %s", task)
         if isinstance(task, dict):
             upper_bound = task.get('upper_bound')
             lower_bound = task.get('lower_bound')
@@ -150,21 +190,21 @@ class ToDoList(object):
 
         for i, item in enumerate(self._items):
             if item.urgency >= upper_bound:
-                logging.error("upper bound task: %s" % item)
+                # logging.error("upper bound task: %s" % item)
                 upper_bound_index = i
             if item.urgency <= lower_bound:
-                logging.error("lower bound task: %s" % item)
+                # logging.error("lower bound task: %s" % item)
                 lower_bound_index = i
                 break
-            else:
-                logging.error("not lower bound task: %s", item)
-                logging.error("(item.urgency <= lower_bound is %s <= %s is %s", item.urgency, lower_bound, item.urgency <= lower_bound)
-        logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
+            # else:
+            #     logging.error("not lower bound task: %s", item)
+            #     logging.error("(item.urgency <= lower_bound is %s <= %s is %s", item.urgency, lower_bound, item.urgency <= lower_bound)
+        # logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
 
         if lower_bound_index - upper_bound_index > 1:
             halfway_point = (upper_bound_index + lower_bound_index) / 2
-            logging.error("halfway point: %s" % halfway_point)
-            logging.error("halfway item: %s" % self._items[halfway_point])
+            # logging.error("halfway point: %s" % halfway_point)
+            # logging.error("halfway item: %s" % self._items[halfway_point])
             raise AmbiguousUrgencyExeption(self._items[halfway_point])
 
         new_item.urgency = self.get_urgency_between(upper_bound_index, lower_bound_index)
@@ -179,15 +219,15 @@ class ToDoList(object):
 
     def _recalculate_urgencies(self):
         assert len(self._items) >= 3
-        logging.error("recalculating...")
-        logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
+        # logging.error("recalculating...")
+        # logging.error("all items: %s" % [(i, item.task, item.urgency) for i, item in enumerate(self._items)])
 
         step = (2 ** 17) / (len(self._items) - 1)
         max_urgency = (2 ** 16) - step
-        logging.error("step: %s", step)
-        logging.error("max_urgency: %s", max_urgency)
+        # logging.error("step: %s", step)
+        # logging.error("max_urgency: %s", max_urgency)
         for i, item in enumerate(self._items[1:-1]):
             new_urgency = 1. * max_urgency - step * i
-            logging.error("changing urgency for %s from %s to %s", item, item.urgency, new_urgency)
+            # logging.error("changing urgency for %s from %s to %s", item, item.urgency, new_urgency)
             item.urgency = new_urgency
             item.save()
