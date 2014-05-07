@@ -9,6 +9,9 @@ handlers:
   static_files: img/favicon.ico
   upload: img/favicon.ico
 
+- url: /canned
+  static_dir: canned
+
 - url: /style
   static_dir: style
 

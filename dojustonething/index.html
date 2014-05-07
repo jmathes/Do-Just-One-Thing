@@ -1,49 +1,56 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="style/CSS3.Gmail.Buttons/css3-gmail-style.css" type="text/css" />
-    <link rel="stylesheet" href="style/djot.css" type="text/css" />
-    <title>
-      OneAtATi.me
-    </title>
-  </head>
-  <body>
-    <div class="content">
-      <div class="top-down">
-        <div class="left-to-right">
-          <div class="thing-to-do-box">
-            <h2 id="thing-to-do" class="thing-to-do">
-              <img src="img/roller.gif"> </img>
-            </div>
-          </div>
-        </div>
-        <div class="left-to-right">
-          <div class="top-down">
-            <a href="#" class="bttn icon tools unready"></a>
-          </div>
-          <div class="top-down">
-            <div class="left-to-right">Score:</div><div id="score" class="left-to-right">?</div>
-          </div>
-        </div>
-      </div>
-      <div class="top-down" style="padding:5px;">
-        <a href="#" class="bttn icon add unready" id="addthing">ADD</a>
-        <a href="#" class="bttn icon pin yellow unready" id="delaything">LATER</a>
-        <a href="#" class="bttn icon remove red unready" id="deletething">NOPE</a>
-        <a href="#" class="bttn icon approve blue unready" id="didthing">DONE!</a>
-      </div>
-      <div id="newthing_dialog" title="Adding a thing" style="display:none;">  <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
-      <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
-        <div id="newthing_task" class="comparison">
-        </div>
-        <div id="benchmark_task" class="comparison">
+<head>
+  <link rel="stylesheet" href="style/CSS3.Gmail.Buttons/css3-gmail-style.css" type="text/css" />
+  <link rel="stylesheet" href="style/djot.css" type="text/css" />
+  <link rel="stylesheet" href="style/dropdown.css" type="text/css" />
+  <title>
+    OneAtATi.me
+  </title>
+</head>
+<body>
+  <div class="content">
+    <div class="top-down">
+      <div class="left-to-right">
+        <div class="thing-to-do-box">
+          <h2 id="thing-to-do" class="thing-to-do">
+            <img src="img/roller.gif"> </img>
+          </h2>
         </div>
       </div>
     </div>
+    <div class="left-to-right">
+      <div class="top-down">
+        <a href="#" class="bttn icon tools unready"></a>
+      </div>
+      <div class="top-down">
+        <div class="left-to-right">Score:</div>
+        <div id="score" class="left-to-right">?</div>
+      </div>
+    </div>
+  </div>
+  <div class="top-down" style="padding:5px;">
+    <a href="#" class="bttn icon add unready" id="addthing">ADD</a>
+    <a href="#" class="bttn icon pin yellow unready" id="delaything">LATER</a>
+    <a href="#" class="bttn icon remove red unready" id="deletething">NOPE</a>
+    <a href="#" class="bttn icon approve blue unready" id="didthing">DONE!</a>
+  </div>
+  <div id="newthing_dialog" title="Adding a thing" style="display:none;">
+    <textarea style="width:99%; height:99%; resize:none;" id="newthing"></textarea>
+    <div id="compare_dialog" title="Which is more urgent?" style="display:none;">
+      <div id="newthing_task" class="comparison">
+      </div>
+      <div id="benchmark_task" class="comparison">
+      </div>
+    </div>
+  </div>
 
- <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/script/api.js"></script>
-    <script type="text/javascript" src="/script/index.js"></script>
-  </body>
+  <script type="text/javascript" src="/script/api.js"></script>
+  <script type="text/javascript" src="/script/index.js"></script>
+
+
+
+</body>
 </html>
