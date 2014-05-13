@@ -17,10 +17,11 @@ class MainPage(webapp.RequestHandler):
 
     def get(self):
         user = users.get_current_user()
-        user_info = UserInfo.get(user)
 
         if user is None:
             return self.redirect(users.create_login_url(self.request.uri))
+
+        user_info = UserInfo.get(user)
         username = user.nickname()
         logout_url = users.create_logout_url(self.request.uri)
 
