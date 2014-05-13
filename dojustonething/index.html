@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+{% autoescape on %}
 <html>
 <head>
   <link rel="stylesheet" href="style/CSS3.Gmail.Buttons/css3-gmail-style.css" type="text/css" />
@@ -26,13 +28,14 @@
             <ul class="sub_menu">
                <li>
                 <a href="#">Things per day&nbsp;&nbsp;&nbsp;&#9656;</a>
+                <script>window.tasklimit = {{daily_limit}};</script>
                 <ul>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">8</a></li>
-                  <li><a href="#">&#8734;</a></li>
+                  <li><a href="#" class="tasklimit" value="1">1</a></li>
+                  <li><a href="#" class="tasklimit" value="2">2</a></li>
+                  <li><a href="#" class="tasklimit" value="3">3</a></li>
+                  <li><a href="#" class="tasklimit" value="5">5</a></li>
+                  <li><a href="#" class="tasklimit" value="8">8</a></li>
+                  <li><a href="#" class="tasklimit" value="Infinity">&#8734;</a></li>
                 </ul>
                </li>
             </ul>
@@ -72,3 +75,4 @@
 
 </body>
 </html>
+{% endautoescape %}

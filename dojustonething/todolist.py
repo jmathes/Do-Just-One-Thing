@@ -82,11 +82,11 @@ class ToDoList(object):
         self._items = [fake_highest_item, fake_lowest_item]
         self._items_completed_today = 0
 
-    def get_top_item(self):
+    def get_top_item(self, throttle=THROTTLE):
         now = datetime.now()
-        if self._items_completed_today >= THROTTLE:
+        if throttle is not None and self._items_completed_today >= throttle:
             return {
-                'task': "Enjoy the rest of the day! You've already finished your %s things for today" % THROTTLE,
+                'task': "Enjoy the rest of the day! You've already finished your %s things for today" % throttle,
                 'id': None,
             }
 

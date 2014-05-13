@@ -22,10 +22,21 @@ def api(func):
     global api_funcs
     api_funcs[func.__name__] = func
 
-
 @api
 def multiply(a, b):
     return a * b
+
+@api
+def set_limit(limit):
+    user = users.get_current_user()
+    user_info = UserInfo.get(user)
+    try:
+        user_info.daily_limit = int(limit)
+    except ValueError:
+        user_info.daily_limit = None
+
+    user_info.save()
+    return user_info.daily_limit if user_info.daily_limit is not None else "Infinity"
 
 @api
 def did_task(item_id):
@@ -39,7 +50,7 @@ def did_task(item_id):
         new_points += random.randint(0, 3)
     user_info.score += new_points
     user_info.save()
-    return [users_list.get_top_item(), user_info.score]
+    return [users_list.get_top_item(user_info.daily_limit), user_info.score]
 
 @api
 def delete_task(item_id):
@@ -47,14 +58,15 @@ def delete_task(item_id):
     users_list = ToDoList(user.nickname(), db)
     users_list.delete_item(item_id)
     user_info = UserInfo.get(user)
-    return [users_list.get_top_item(), user_info.score]
+    return [users_list.get_top_item(user_info.daily_limit), user_info.score]
 
 @api
 def delay_task(item_id):
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
     users_list.delay_item(item_id)
-    return users_list.get_top_item()
+    user_info = UserInfo.get(user)
+    return users_list.get_top_item(user_info.daily_limit)
 
 @api
 def get_score():
@@ -66,14 +78,16 @@ def get_score():
 def get_next_task():
     user = users.get_current_user()
     users_list = ToDoList(user.nickname(), db)
-    return users_list.get_top_item()
+    user_info = UserInfo.get(user)
+    return users_list.get_top_item(user_info.daily_limit)
 
 @api
 def get_next_task_and_score():
     user = users.get_current_user()
     user_info = UserInfo.get(user)
     users_list = ToDoList(user.nickname(), db)
-    return [users_list.get_top_item(), user_info.score]
+    user_info = UserInfo.get(user)
+    return [users_list.get_top_item(user_info.daily_limit), user_info.score]
 
 @api
 def add_task(todo):
@@ -90,11 +104,11 @@ def add_task(todo):
                 'urgency': e.benchmark.urgency,
             },
         }
+    user_info = UserInfo.get(user)
     return {
         'success': True,
-        'top_item': users_list.get_top_item(),
+        'top_item': users_list.get_top_item(user_info.daily_limit),
     }
-
 
 class ApiRequestHandler(webapp.RequestHandler):
     def post(self, func=None):

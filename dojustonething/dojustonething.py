@@ -6,6 +6,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.api import users
 
+from userinfo import UserInfo
 
 
 class MainPage(webapp.RequestHandler):
@@ -16,6 +17,7 @@ class MainPage(webapp.RequestHandler):
 
     def get(self):
         user = users.get_current_user()
+        user_info = UserInfo.get(user)
 
         if user is None:
             return self.redirect(users.create_login_url(self.request.uri))
@@ -25,6 +27,7 @@ class MainPage(webapp.RequestHandler):
         self.render('index.html', {
             'logout_url': logout_url,
             'username': username,
+            'daily_limit': user_info.daily_limit if user_info.daily_limit is not None else "Infinity",
         })
 
 

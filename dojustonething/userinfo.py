@@ -8,6 +8,7 @@ class UserInfo(db.Model):
     user_id = db.StringProperty()
     signup_date = db.DateTimeProperty(auto_now_add=True)
     score = db.IntegerProperty()
+    daily_limit = db.IntegerProperty()
 
     @classmethod
     def get(cls, user_id):
@@ -15,10 +16,8 @@ class UserInfo(db.Model):
             user_id = user_id.user_id()
         user_infos = list(cls.gql("WHERE user_id = :1", user_id))
         if len(user_infos) == 0:
-            user_info = UserInfo(user_id=user_id, score=0)
-            logging.error("making new one")
+            user_info = UserInfo(user_id=user_id, score=0, daily_limit=3)
             user_info.save()
         else:
             user_info = user_infos[0]
-            logging.error("returning old one")
         return user_info

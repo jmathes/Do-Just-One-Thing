@@ -12,6 +12,16 @@ $(document).ready(function() {
         $("#compare_dialog").dialog("close");
     });
 
+    $(".tasklimit").click(function() {
+        window.api("set_limit", this.innerHTML, limit_set)
+        redraw_tasklimits("unknown");
+    });
+
+    var limit_set = function(response) {
+        window.tasklimit = 1 * response;
+        redraw_tasklimits(window.tasklimit);
+    }
+
     var compare = function() {
         var draw_button = function(selector, is_newthing_button) {
             if (is_newthing_button) {
@@ -54,6 +64,16 @@ $(document).ready(function() {
         show_next_task(response[0]);
         show_score(response[1]);
     };
+
+    var redraw_tasklimits = function(tasklimit) {
+        $.each($(".tasklimit"), function( index, elem ) {
+            var new_val = elem.attributes.value.value == "Infinity" ? "&#8734;" : elem.attributes.value.value;
+            if (tasklimit == elem.attributes.value.value) {
+                new_val += "&nbsp;&#10003;";
+            }
+            elem.innerHTML = new_val;
+        });
+    }
 
     window.newthing_dialog = $("#newthing_dialog").dialog({
         buttons: { "Add": function() {
@@ -112,5 +132,9 @@ $(document).ready(function() {
         [],
         show_next_task_and_score
         );
+
+
+    redraw_tasklimits(window.tasklimit);
+
 });
 
